@@ -2,6 +2,13 @@
 name = "aihorde-rs"
 version = "0.1.0"
 edition = "2024"
+repository = "https://github.com/lapismyt/aihorde-rs"
+readme = "README.md"
+description = "Rust library for using AI Horde with ease"
+authors = ["Nikita Ugnich"]
+license-file = "LICENSE"
+keywords = ["aihorde", "ai", "stable-diffusion", "image-generation", "text-to-image"]
+categories = ["asynchronous", "multimedia::images", "web-programming::http-client"]
 
 [dependencies]
 chrono = { version = "0.4.42", features = ["serde"] }
