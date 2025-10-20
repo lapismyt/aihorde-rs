@@ -35,6 +35,12 @@ impl Default for AihordeClient {
 }
 
 impl AihordeClient {
+
+    /// ### Create a new AihordeClient instance
+    /// #### Arguments
+    /// * `api_key` - The API Key corresponding to a registered user.
+    /// * `base_url` - The base URL of the AI Horde to connect to.
+    /// * `client_agent` - The client name and version.
     pub fn new(
         api_key: Option<String>,
         base_url: Option<Url>,
@@ -87,7 +93,7 @@ impl AihordeClient {
         }
     }
 
-    /// #### Lookup user based on their API key
+    /// ### Lookup user based on their API key
     /// This can be used to verify a user exists
     pub async fn find_user(&self) -> Result<UserDetails, AihordeError> {
         let url = format!("{}/find_user", self.base_url);
@@ -102,7 +108,9 @@ impl AihordeClient {
         Ok(user)
     }
 
-    /// #### Details and statistics about a specific user
+    /// ### Details and statistics about a specific user
+    /// #### Arguments
+    /// * `user_id` - The ID of the user to retrieve.
     pub async fn get_user(&self, user_id: String) -> Result<UserDetails, AihordeError> {
         let url = format!("{}/users/{}", self.base_url, user_id);
         let response = self
@@ -116,7 +124,10 @@ impl AihordeClient {
         Ok(user)
     }
 
-    /// #### A List with the details and statistic of all registered users
+    /// ### A List with the details and statistic of all registered users
+    /// #### Arguments
+    /// * `page` - Which page of results to return. Each page has 25 users.
+    /// * `sort` - How to sort the returned list.
     pub async fn get_users(
         &self,
         page: u32,
@@ -135,7 +146,7 @@ impl AihordeClient {
         Ok(users)
     }
 
-    /// #### Initiate an Asynchronous request to generate images
+    /// ### Initiate an Asynchronous request to generate images
     /// This endpoint will immediately return with the UUID of the request for generation.
     /// This endpoint will always be accepted, even if there are no workers available currently to fulfill this request.
     /// Perhaps some will appear in the next 10 minutes.
@@ -157,8 +168,10 @@ impl AihordeClient {
         Ok(request)
     }
 
-    /// #### Retrieve the status of an Asynchronous generation request without images
+    /// ### Retrieve the status of an Asynchronous generation request without images
     /// Use this request to check the status of a currently running asynchronous request without consuming bandwidth.
+    /// #### Arguments
+    /// * `request_id` - The UUID of the request to check.
     pub async fn generation_check(
         &self,
         request_id: String,
@@ -175,10 +188,12 @@ impl AihordeClient {
         Ok(request)
     }
 
-    /// #### Retrieve the full status of an Asynchronous generation request
+    /// ### Retrieve the full status of an Asynchronous generation request
     /// This request will include all already generated images in download URL or base64 encoded .webp files.
-    /// As such, you are requested to not retrieve this endpoint often. Instead use the /check/ endpoint first
-    /// This endpoint is limited to 10 request per minute
+    /// As such, you are requested to not retrieve this endpoint often. Instead use the /check/ endpoint first.
+    /// This endpoint is limited to 10 request per minute.
+    /// #### Arguments
+    /// * `request_id` - The UUID of the request to check.
     pub async fn generation_status(
         &self,
         request_id: String,
@@ -195,6 +210,12 @@ impl AihordeClient {
         Ok(request)
     }
 
+    /// ### Returns a list of models active currently in this horde
+    /// #### Arguments
+    /// * `model_type` - Filter the models by type (image or text).
+    /// * `min_count` - Filter only models that have at least this amount of threads serving.
+    /// * `max_count` - Filter the models that have at most this amount of threads serving.
+    /// * `model_state` - If 'known', only show stats for known models in the model reference. If 'custom' only show stats for custom models. If 'all' shows stats for all models.
     pub async fn get_active_models(
         &self,
         model_type: Option<ModelType>,
